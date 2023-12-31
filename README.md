@@ -1,2 +1,2 @@
 # slack2scb
-Slack app to transfers threads on Slack to Scrapbox
+Slack app to transfer threads on Slack to Scrapbox
