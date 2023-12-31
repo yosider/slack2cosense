@@ -1,0 +1,20 @@
+{
+    "name": "slack2scb",
+    "version": "1.0.0",
+    "type": "module",
+    "main": "index.js",
+    "scripts": {
+        "start": "node src/index.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+        "@slack/bolt": "^3.17.0",
+        "axios": "^1.6.3",
+        "moment": "^2.30.1",
+        "moment-timezone": "^0.5.44",
+        "qs": "^6.11.2"
+    },
+    "engines": {
+        "node": "16.x"
+    }
+}
