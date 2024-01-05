@@ -4,27 +4,37 @@ import qs from "qs";
 
 const apiUrl = "https://slack.com/api";
 const projectName = "yosider-private";
+const maxBlockTextLen = 430;
 
 const generateResponse = async ({ team, channel, message }) => {
     const thread_ts = message.thread_ts || message.ts;
     const threadMessages = await getThreadMessages(channel.id, thread_ts);
     const formattedMessages = threadMessages.map(msg => formatMessage(msg, team, channel)).join('\n');
+    let body = `${formattedMessages}\n\n`;
+
+    // Split the body if it exceeds the maximum length
+    const bodies = [];
+    while (body.length > maxBlockTextLen) {
+        const slice = body.slice(0, maxBlockTextLen);
+        bodies.push(slice);
+        body = body.slice(maxBlockTextLen);
+    }
+    bodies.push(body);  // Push the remaining body
 
     const threadTimeText = moment.unix(thread_ts.split('.')[0]).tz('Asia/Tokyo').format("YYYY-MM-DD HH:mm:ss");
-    const body = `${formattedMessages}\n\n`;
+    const blocks = bodies.map(body => {
+        // const encBody = encodeURIComponent(body);
+        // console.log(body.length);
+        // console.log(encBody.length);
     const url = `https://scrapbox.io/${projectName}/${threadTimeText}?body=${encodeURIComponent(body)}`;
-
-    const blocks = [
-        {
+        return {
             type: "section",
             text: {
                 type: "mrkdwn",
                 text: `<${url}|Click this link to create a page>`,
             },
-        },
-    ];
-
-    console.log(blocks);
+        };
+    });
 
     return blocks;
 };
