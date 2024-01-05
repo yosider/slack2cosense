@@ -26,7 +26,7 @@ const generateResponse = async ({ team, channel, message }) => {
         // const encBody = encodeURIComponent(body);
         // console.log(body.length);
         // console.log(encBody.length);
-    const url = `https://scrapbox.io/${projectName}/${threadTimeText}?body=${encodeURIComponent(body)}`;
+        const url = `https://scrapbox.io/${projectName}/${threadTimeText}?body=${encodeURIComponent(body)}`;
         return {
             type: "section",
             text: {
@@ -85,6 +85,15 @@ const formatMessage = (msg, team, channel) => {
     msg.text = msg.text.replace(/<(https:\/\/[^>|]+)(\|([^>]+))?>/g, (match, url, _, title) => {
         return title ? `[${title} ${url}]` : url;
     });
+
+    // replace HTML entities
+    msg.text = msg.text
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&amp;/g, "&")
+        .replace(/&quot;/g, "\"")
+        .replace(/&apos;/g, "'")
+        .replace(/&nbsp;/g, " ");
 
     // add ">" to each line
     const formattedText = msg.text
