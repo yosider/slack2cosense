@@ -4,34 +4,45 @@ import qs from "qs";
 
 const apiUrl = "https://slack.com/api";
 const projectName = "yosider-private";
-const maxBlockTextLen = 430;
+const msg = "Click this link to create a page";
+const maxBlockNumChar = 3000;
 
 const generateResponse = async ({ team, channel, message }) => {
     const thread_ts = message.thread_ts || message.ts;
     const threadMessages = await getThreadMessages(channel.id, thread_ts);
-    const formattedMessages = threadMessages.map(msg => formatMessage(msg, team, channel)).join('\n');
-    let body = `${formattedMessages}\n\n`;
+    const formattedMessages = threadMessages.map(msg => formatMessage(msg, team, channel)).join('\n') + '\n\n';
+    const body = formattedMessages.replace(/[/?#\{}^|<>%\s\n]/g, char => encodeURIComponent(char));
+
+    const threadTimeText = moment.unix(thread_ts.split('.')[0]).tz('Asia/Tokyo').format("YYYY-MM-DD HH:mm:ss");
+    const urlBase = `https://scrapbox.io/${projectName}/${threadTimeText}?body=`;
+    const maxBodyLen = maxBlockNumChar - urlBase.length - msg.length - 3;
 
     // Split the body if it exceeds the maximum length
+    const isMiddleOfEncodedChar = (str) => str.slice(-2).includes('%');
     const bodies = [];
-    while (body.length > maxBlockTextLen) {
-        const slice = body.slice(0, maxBlockTextLen);
+    while (body.length > maxBodyLen) {
+        let idx = maxBodyLen;
+
+        // Find the last '%' character to avoid breaking the encoded string
+        while (isMiddleOfEncodedChar(body.slice(0, idx))) {
+            idx--;
+        }
+
+        const slice = body.slice(0, idx);
         bodies.push(slice);
-        body = body.slice(maxBlockTextLen);
+        body = body.slice(idx);
     }
     bodies.push(body);  // Push the remaining body
 
-    const threadTimeText = moment.unix(thread_ts.split('.')[0]).tz('Asia/Tokyo').format("YYYY-MM-DD HH:mm:ss");
-    const blocks = bodies.map(body => {
-        // const encBody = encodeURIComponent(body);
-        // console.log(body.length);
-        // console.log(encBody.length);
-        const url = `https://scrapbox.io/${projectName}/${threadTimeText}?body=${encodeURIComponent(body)}`;
+    const blocks = bodies.map(slice => {
+        const url = `${urlBase}${slice}`;
+        // console.log(slice);
+        // console.log(`<${url}|${msg}>`.length);
         return {
             type: "section",
             text: {
                 type: "mrkdwn",
-                text: `<${url}|Click this link to create a page>`,
+                text: `<${url}|${msg}>`,
             },
         };
     });
