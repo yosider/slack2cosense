@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { SlackUrlVerificationPayload } from "../../src/types/slack";
 import { processMessageAction } from "./handlers/messageAction";
-import { getRawBody, parsePayload } from "./utils/requestParser";
+import { getRawBody, parsePayload } from "./lib/requestParser";
 import {
   sendChallengeResponse,
   sendErrorStatus,
@@ -12,8 +12,8 @@ import {
   sendSuccessStatus,
   sendUnknownRequestStatus,
   sendWorkingResponse,
-} from "./utils/responseHelpers";
-import { verifySlackSignature } from "./utils/validation";
+} from "./lib/responseHelpers";
+import { verifySlackSignature } from "./lib/validation";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   console.log("=== Slack Events Handler ===");

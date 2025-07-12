@@ -1,6 +1,6 @@
 import { generateResponse } from "../../../src/cosense";
 import { SlackMessageActionPayload } from "../../../src/types/slack";
-import { sendErrorResponse, sendSuccessResponse } from "../utils/slackResponse";
+import { sendErrorResponse, sendSuccessResponse } from "../lib/slackResponse";
 
 function createSuccessMessage(
   channelName: string,
