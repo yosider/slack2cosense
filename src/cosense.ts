@@ -10,7 +10,7 @@ import type {
   SlackShortcut,
   SlackTeam,
   SlackUserInfoResponse,
-} from "./types";
+} from "../types";
 
 const config: AppConfig = {
   slackApiUrl: "https://slack.com/api",

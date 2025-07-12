@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { SlackUrlVerificationPayload } from "../../src/types/slack";
+import { SlackUrlVerificationPayload } from "../../types/slack";
 import { processMessageAction } from "./handlers/messageAction";
 import { getRawBody, parsePayload } from "./lib/requestParser";
 import {

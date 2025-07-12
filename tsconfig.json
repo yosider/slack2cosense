@@ -15,18 +15,12 @@
         "resolveJsonModule": true,
         "noEmit": false,
         "baseUrl": ".",
-        "paths": {
-            "@/*": [
-                "src/*"
-            ],
-            "@/api/*": [
-                "api/*"
-            ]
-        }
+        // path mapping does not work with vercel functions
     },
     "include": [
         "src/**/*",
-        "api/**/*"
+        "api/**/*",
+        "types"
     ],
     "exclude": [
         "node_modules",

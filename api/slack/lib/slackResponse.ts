@@ -1,7 +1,4 @@
-import {
-  SlackResponseBlock,
-  SlackResponseMessage,
-} from "../../../src/types/slack";
+import { SlackResponseBlock, SlackResponseMessage } from "../../../types/slack";
 
 export async function sendSuccessResponse(
   responseUrl: string,

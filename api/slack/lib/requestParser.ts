@@ -1,5 +1,5 @@
 import type { VercelRequest } from "@vercel/node";
-import { SlackMessageActionPayload } from "../../../src/types/slack";
+import { SlackMessageActionPayload } from "../../../types/slack";
 
 export function getRawBody(req: VercelRequest): string {
   if (req.body && typeof req.body === "string") {
