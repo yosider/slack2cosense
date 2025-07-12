@@ -9,10 +9,10 @@ function createSuccessMessage(
 ): string {
   return (
     `✅ *Generated Cosense page URL!*\n\n` +
-    `*Channel:* #${channelName}\n` +
-    `*User:* ${username}\n` +
     `*Original message:*\n` +
-    `> ${messageText}`
+    `> ${messageText}\n\n` +
+    `*Channel:* #${channelName}\n` +
+    `*User:* ${username}`
   );
 }
 
