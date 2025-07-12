@@ -9,18 +9,28 @@
         "strict": true,
         "skipLibCheck": true,
         "outDir": "./dist",
-        "rootDir": "./src",
+        "rootDir": ".",
         "declaration": true,
         "sourceMap": true,
         "resolveJsonModule": true,
         "allowImportingTsExtensions": true,
         "noEmit": true,
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "src/*"
+            ],
+            "@/api/*": [
+                "api/*"
+            ]
+        },
         "types": [
             "node"
         ]
     },
     "include": [
-        "src/**/*"
+        "src/**/*",
+        "api/**/*"
     ],
     "exclude": [
         "node_modules",
