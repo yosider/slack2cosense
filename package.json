@@ -1,20 +1,32 @@
 {
-    "name": "slack2scb",
+    "name": "slack2cosense",
     "version": "1.0.0",
     "type": "module",
-    "main": "index.js",
+    "main": "api/slack/events.ts",
     "scripts": {
-        "start": "node src/index.js",
+        "dev": "vercel dev",
+        "build": "tsc",
+        "start": "node dist/api/slack/events.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "dependencies": {
         "@slack/bolt": "^3.17.0",
+        "@vercel/node": "^5.3.5",
         "axios": "^1.6.3",
         "moment": "^2.30.1",
         "moment-timezone": "^0.5.44",
         "qs": "^6.11.2"
     },
+    "devDependencies": {
+        "@types/moment-timezone": "^0.5.0",
+        "@types/node": "^18.0.0",
+        "@types/qs": "^6.9.0",
+        "tsx": "^4.0.0",
+        "typescript": "^5.0.0",
+        "vercel": "^37.14.0"
+    },
     "engines": {
-        "node": "16.x"
-    }
+        "node": ">=18.0.0"
+    },
+    "packageManager": "pnpm@10.13.1"
 }
