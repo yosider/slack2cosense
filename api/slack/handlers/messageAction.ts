@@ -2,15 +2,20 @@ import { generateResponse } from "../../../src/cosense";
 import { SlackMessageActionPayload } from "../../../src/types/slack";
 import { sendErrorResponse, sendSuccessResponse } from "../utils/slackResponse";
 
-const MESSAGES = {
-  SUCCESS: "✅ Generated Cosense page URL!",
-  SUCCESS_DETAIL: (
-    channelName: string,
-    username: string,
-    messageText: string
-  ) =>
-    `✅ *Generated Cosense page URL!*\n\n*Original message:*\n> ${messageText}\n\n*Channel:* #${channelName}\n*User:* ${username}\n\nClick the link below to create a page in Cosense:`,
-};
+function createSuccessMessage(
+  channelName: string,
+  username: string,
+  messageText: string
+): string {
+  return (
+    `✅ *Generated Cosense page URL!*\n\n` +
+    `*Channel:* #${channelName}\n` +
+    `*User:* ${username}\n` +
+    `*Original message:*\n` +
+    `> ${messageText}`
+  );
+}
+
 export async function handleShareAction(
   payload: SlackMessageActionPayload
 ): Promise<{ success: boolean; error?: string }> {
@@ -27,7 +32,7 @@ export async function handleShareAction(
       user: payload.user,
     });
 
-    const successMessage = MESSAGES.SUCCESS_DETAIL(
+    const successMessage = createSuccessMessage(
       payload.channel.name,
       payload.user.username,
       payload.message.text
