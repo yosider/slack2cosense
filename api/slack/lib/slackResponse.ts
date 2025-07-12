@@ -49,7 +49,7 @@ export async function sendErrorResponse(
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `❌ *Error occurred*\n\nFailed to generate Cosense URL.\nError: ${errorMessage}`,
+          text: `❌ *Error occurred*\n\nError: ${errorMessage}`,
         },
       },
     ],

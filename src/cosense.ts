@@ -76,7 +76,7 @@ const generateResponse = async (
     return blocks;
   } catch (error) {
     console.error("Error generating response:", error);
-    throw new Error("Failed to generate Cosense response");
+    throw new Error(`Failed to generate Cosense response\n→ ${error}`);
   }
 };
 
@@ -112,7 +112,7 @@ const getThreadMessages = async (
     return messages;
   } catch (error) {
     console.error("Error fetching thread messages:", error);
-    throw new Error("Failed to fetch thread messages");
+    throw new Error(`Failed to fetch thread messages\n→ ${error}`);
   }
 };
 
