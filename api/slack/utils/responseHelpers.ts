@@ -16,10 +16,6 @@ export function sendSuccessStatus(res: VercelResponse) {
   return res.status(200).json({ status: "success" });
 }
 
-export function sendEventReceivedStatus(res: VercelResponse) {
-  return res.status(200).json({ status: "event_received" });
-}
-
 export function sendUnknownRequestStatus(res: VercelResponse) {
   return res.status(200).json({ status: "unknown_request" });
 }

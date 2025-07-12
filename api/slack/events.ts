@@ -1,14 +1,10 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import {
-  SlackEventCallbackPayload,
-  SlackUrlVerificationPayload,
-} from "../../src/types/slack";
+import { SlackUrlVerificationPayload } from "../../src/types/slack";
 import { processMessageAction } from "./handlers/messageAction";
 import { getRawBody, parsePayload } from "./utils/requestParser";
 import {
   sendChallengeResponse,
   sendErrorStatus,
-  sendEventReceivedStatus,
   sendInternalServerError,
   sendInvalidSignatureError,
   sendMethodNotAllowedError,
@@ -74,13 +70,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         } else {
           return sendErrorStatus(res, result.error!);
         }
-      }
-
-      // Event callbacks: Real-time workspace events (messages, reactions, etc.)
-      const eventBody = req.body as SlackEventCallbackPayload;
-      if (eventBody.type === "event_callback") {
-        console.log("📅 Event callback received");
-        return sendEventReceivedStatus(res);
       }
 
       console.log("❓ Unknown request type:", req.body);
