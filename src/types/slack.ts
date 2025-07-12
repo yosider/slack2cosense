@@ -1,4 +1,3 @@
-// Slack基本型定義
 export interface SlackTeam {
   id: string;
   domain: string;
@@ -34,7 +33,7 @@ export interface SlackShortcut {
   user: SlackUser;
 }
 
-// Slackペイロード型定義
+// Slack event payloads
 export interface SlackUrlVerificationPayload {
   type: 'url_verification';
   challenge: string;
@@ -75,7 +74,7 @@ export interface SlackInteractiveComponentPayload {
   payload: string;
 }
 
-// Slack API レスポンス型定義
+// Slack API responses
 export interface SlackConversationRepliesResponse {
   ok: boolean;
   messages?: SlackMessage[];
@@ -91,8 +90,15 @@ export interface SlackUserInfoResponse {
   error?: string;
 }
 
-// Slack レスポンス型定義
-export interface SlackResponse {
+export interface SlackResponseBlock {
+  type: string;
+  text?: {
+    type: string;
+    text: string;
+  };
+}
+
+export interface SlackResponseMessage {
   text: string;
-  blocks: any[];
-} 
+  blocks: SlackResponseBlock[];
+}
