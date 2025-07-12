@@ -35,19 +35,19 @@ export interface SlackShortcut {
 
 // Slack event payloads
 export interface SlackUrlVerificationPayload {
-  type: 'url_verification';
+  type: "url_verification";
   challenge: string;
 }
 
 export interface SlackEventCallbackPayload {
-  type: 'event_callback';
+  type: "event_callback";
   team_id: string;
   api_app_id: string;
   event: any;
 }
 
 export interface SlackMessageActionPayload {
-  type: 'message_action';
+  type: "message_action";
   callback_id: string;
   team: SlackTeam;
   channel: SlackChannel;
@@ -61,7 +61,7 @@ export interface SlackMessageActionPayload {
 }
 
 export interface SlackShortcutPayload {
-  type: 'shortcut';
+  type: "shortcut";
   callback_id: string;
   team: SlackTeam;
   user: SlackUser;

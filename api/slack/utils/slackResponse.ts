@@ -1,4 +1,7 @@
-import { SlackResponseBlock, SlackResponseMessage } from '../../../src/types/slack';
+import {
+  SlackResponseBlock,
+  SlackResponseMessage,
+} from "../../../src/types/slack";
 
 export async function sendSuccessResponse(
   responseUrl: string,
@@ -12,25 +15,25 @@ export async function sendSuccessResponse(
         type: "section",
         text: {
           type: "mrkdwn",
-          text: message
-        }
+          text: message,
+        },
       },
-      ...blocks
-    ]
+      ...blocks,
+    ],
   };
 
   try {
     const response = await fetch(responseUrl, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(responseMessage)
+      body: JSON.stringify(responseMessage),
     });
 
     return response.ok;
   } catch (error) {
-    console.error('❌ Error sending success response:', error);
+    console.error("❌ Error sending success response:", error);
     return false;
   }
 }
@@ -46,24 +49,24 @@ export async function sendErrorResponse(
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `❌ *Error occurred*\n\nFailed to generate Cosense URL.\nError: ${errorMessage}`
-        }
-      }
-    ]
+          text: `❌ *Error occurred*\n\nFailed to generate Cosense URL.\nError: ${errorMessage}`,
+        },
+      },
+    ],
   };
 
   try {
     const response = await fetch(responseUrl, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(errorResponse)
+      body: JSON.stringify(errorResponse),
     });
 
     return response.ok;
   } catch (error) {
-    console.error('❌ Error sending error response:', error);
+    console.error("❌ Error sending error response:", error);
     return false;
   }
-} 
+}

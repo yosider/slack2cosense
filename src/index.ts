@@ -1,7 +1,10 @@
-export { generateResponse } from './cosense';
+export { generateResponse } from "./cosense";
 
 export type {
-    CosenseBlock, SlackChannel,
-    SlackMessage, SlackShortcut,
-    SlackTeam, SlackUser
-} from './types';
+  CosenseBlock,
+  SlackChannel,
+  SlackMessage,
+  SlackShortcut,
+  SlackTeam,
+  SlackUser,
+} from "./types";

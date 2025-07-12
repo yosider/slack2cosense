@@ -12,4 +12,4 @@ export interface AppConfig {
   linkMessage: string;
   maxBlockNumChar: number;
   slackApiUrl: string;
-} 
+}
