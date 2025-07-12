@@ -1,11 +1,9 @@
 {
     "name": "slack2cosense",
     "version": "1.0.0",
-    "type": "module",
     "main": "api/slack/events.ts",
     "scripts": {
-        "dev": "vercel dev",
-        "build": "tsc",
+        "dev": "tsx api/slack/events.ts",
         "start": "node dist/api/slack/events.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },

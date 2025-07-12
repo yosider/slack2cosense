@@ -5,16 +5,10 @@
             "maxDuration": 30
         }
     },
-    "env": {
-        "SLACK_BOT_TOKEN": "@slack_bot_token",
-        "SLACK_SIGNING_SECRET": "@slack_signing_secret",
-        "SLACK_USER_TOKEN": "@slack_user_token"
-    },
-    "build": {
-        "env": {
-            "SLACK_BOT_TOKEN": "@slack_bot_token",
-            "SLACK_SIGNING_SECRET": "@slack_signing_secret",
-            "SLACK_USER_TOKEN": "@slack_user_token"
+    "routes": [
+        {
+            "src": "/api/slack/events",
+            "dest": "/api/slack/events"
         }
-    }
+    ]
 }

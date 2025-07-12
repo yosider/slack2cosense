@@ -29,7 +29,7 @@ const generateResponse = async (shortcut: SlackShortcut): Promise<CosenseBlock[]
     let body = formattedMessages.replace(/[/?#\{}^|<>%\s\n]/g, char => encodeURIComponent(char));
 
     const threadTimeText = moment.unix(parseFloat(thread_ts.split('.')[0])).tz('Asia/Tokyo').format("YYYY-MM-DD HH:mm:ss");
-    const urlBase = `https://cosense.io/${config.projectName}/${threadTimeText}?body=`;
+    const urlBase = `https://cosen.se/${config.projectName}/${threadTimeText}?body=`;
     const maxBodyLen = config.maxBlockNumChar - urlBase.length - config.linkMessage.length - 3;
 
     // Split the body if it exceeds the maximum length
