@@ -2,15 +2,15 @@ import axios, { AxiosResponse } from "axios";
 import moment from "moment-timezone";
 import qs from "qs";
 import type {
-    AppConfig,
-    CosenseBlock,
-    SlackChannel,
-    SlackConversationRepliesResponse,
-    SlackMessage,
-    SlackShortcut,
-    SlackTeam,
-    SlackUserInfoResponse
-} from "./types.js";
+  AppConfig,
+  CosenseBlock,
+  SlackChannel,
+  SlackConversationRepliesResponse,
+  SlackMessage,
+  SlackShortcut,
+  SlackTeam,
+  SlackUserInfoResponse
+} from "./types";
 
 const config: AppConfig = {
   slackApiUrl: "https://slack.com/api",

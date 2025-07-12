@@ -1,17 +1,5 @@
-// Define types for Vercel
-interface VercelRequest {
-  method: string;
-  headers: Record<string, string | string[]>;
-  body: any;
-  query: Record<string, string | string[]>;
-}
-
-interface VercelResponse {
-  status: (code: number) => VercelResponse;
-  json: (data: any) => void;
-}
-
-// Import Cosense integration
+// Import types and functions
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { generateResponse } from '../../src/cosense';
 
 // Export handler for Vercel serverless function
