@@ -1,14 +1,14 @@
 {
     "version": 2,
     "functions": {
-        "api/slack/events.ts": {
+        "api/actions/index.ts": {
             "maxDuration": 30
         }
     },
     "routes": [
         {
-            "src": "/api/slack/events",
-            "dest": "/api/slack/events"
+            "src": "/api/actions",
+            "dest": "/api/actions"
         }
     ]
 }
