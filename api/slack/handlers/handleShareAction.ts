@@ -60,18 +60,3 @@ export async function handleShareAction(
     return { success: false, error: errorMessage };
   }
 }
-
-export async function processMessageAction(
-  payload: SlackMessageActionPayload
-): Promise<{ success: boolean; error?: string }> {
-  switch (payload.callback_id) {
-    case "share":
-      return await handleShareAction(payload);
-    default:
-      console.log("❓ Unknown callback_id:", payload.callback_id);
-      return {
-        success: false,
-        error: `Unknown callback_id: ${payload.callback_id}`,
-      };
-  }
-}

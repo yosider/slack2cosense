@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { SlackUrlVerificationPayload } from "../../types/slack";
-import { processMessageAction } from "./handlers/messageAction";
+import { handleMessageActions } from "./handlers";
 import { getRawBody, parsePayload } from "./lib/requestParser";
 import {
   sendChallengeResponse,
@@ -63,7 +63,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       if (payload && payload.type === "message_action") {
         console.log("🎯 Message action received:", payload.callback_id);
 
-        const result = await processMessageAction(payload);
+        const result = await handleMessageActions(payload);
 
         if (result.success) {
           return sendSuccessStatus(res);
