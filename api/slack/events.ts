@@ -1,34 +1,23 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import {
   SlackEventCallbackPayload,
-  SlackMessageActionPayload,
   SlackUrlVerificationPayload,
 } from "../../src/types/slack";
 import { processMessageAction } from "./handlers/messageAction";
+import { getRawBody, parsePayload } from "./utils/requestParser";
+import {
+  sendChallengeResponse,
+  sendErrorStatus,
+  sendEventReceivedStatus,
+  sendInternalServerError,
+  sendInvalidSignatureError,
+  sendMethodNotAllowedError,
+  sendMissingHeadersError,
+  sendSuccessStatus,
+  sendUnknownRequestStatus,
+  sendWorkingResponse,
+} from "./utils/responseHelpers";
 import { verifySlackSignature } from "./utils/validation";
-
-function getRawBody(req: VercelRequest): string {
-  if (req.body && typeof req.body === "string") {
-    return req.body;
-  }
-  if (req.body && typeof req.body === "object") {
-    return new URLSearchParams(req.body).toString();
-  }
-  return "";
-}
-
-function parsePayload(body: any): SlackMessageActionPayload | null {
-  if (!body || !body.payload) {
-    return null;
-  }
-
-  try {
-    return JSON.parse(body.payload) as SlackMessageActionPayload;
-  } catch (error) {
-    console.error("Error parsing payload:", error);
-    return null;
-  }
-}
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   console.log("=== Slack Events Handler ===");
@@ -37,10 +26,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     if (req.method === "GET") {
-      return res.status(200).json({
-        message: "Slack Events API endpoint is working",
-        timestamp: new Date().toISOString(),
-      });
+      return sendWorkingResponse(res);
     }
 
     if (req.method === "POST") {
@@ -52,7 +38,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
       if (!timestamp || !signature) {
         console.error("❌ Missing signature headers");
-        return res.status(401).json({ error: "Missing signature headers" });
+        return sendMissingHeadersError(res);
       }
 
       if (
@@ -64,17 +50,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         )
       ) {
         console.error("❌ Invalid signature");
-        return res.status(401).json({ error: "Invalid signature" });
+        return sendInvalidSignatureError(res);
       }
 
       console.log("✅ Signature verified");
 
+      // URL verification: Slack validates our endpoint URL during app setup
       const body = req.body as SlackUrlVerificationPayload;
       if (body.type === "url_verification") {
         console.log("🔗 URL verification request");
-        return res.status(200).json({ challenge: body.challenge });
+        return sendChallengeResponse(res, body.challenge);
       }
 
+      // Message actions: User interactions with message shortcuts/buttons
       const payload = parsePayload(req.body);
       if (payload && payload.type === "message_action") {
         console.log("🎯 Message action received:", payload.callback_id);
@@ -82,29 +70,27 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const result = await processMessageAction(payload);
 
         if (result.success) {
-          return res.status(200).json({ status: "success" });
+          return sendSuccessStatus(res);
         } else {
-          return res.status(500).json({ error: result.error });
+          return sendErrorStatus(res, result.error!);
         }
       }
 
+      // Event callbacks: Real-time workspace events (messages, reactions, etc.)
       const eventBody = req.body as SlackEventCallbackPayload;
       if (eventBody.type === "event_callback") {
         console.log("📅 Event callback received");
-        return res.status(200).json({ status: "event_received" });
+        return sendEventReceivedStatus(res);
       }
 
       console.log("❓ Unknown request type:", req.body);
-      return res.status(200).json({ status: "unknown_request" });
+      return sendUnknownRequestStatus(res);
     }
 
     console.log("❌ Unsupported method:", req.method);
-    return res.status(405).json({ error: "Method not allowed" });
+    return sendMethodNotAllowedError(res);
   } catch (error) {
     console.error("❌ Handler error:", error);
-    return res.status(500).json({
-      error: "Internal server error",
-      message: error instanceof Error ? error.message : "Unknown error",
-    });
+    return sendInternalServerError(res, error);
   }
 }
