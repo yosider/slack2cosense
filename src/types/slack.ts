@@ -13,12 +13,16 @@ export interface SlackUser {
   id: string;
   username: string;
   name: string;
+  team_id?: string;
 }
 
 export interface SlackMessage {
   ts: string;
   user: string;
   text: string;
+  type?: string;
+  team?: string;
+  blocks?: any[];
   thread_ts?: string;
   userName?: string;
 }
@@ -52,7 +56,9 @@ export interface SlackMessageActionPayload {
   message: SlackMessage;
   response_url: string;
   trigger_id: string;
-  token: string;
+  action_ts: string;
+  message_ts: string;
+  token?: string;
 }
 
 export interface SlackShortcutPayload {

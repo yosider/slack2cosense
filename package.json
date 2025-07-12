@@ -8,7 +8,6 @@
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "dependencies": {
-        "@slack/bolt": "^3.17.0",
         "@vercel/node": "^5.3.5",
         "axios": "^1.6.3",
         "moment": "^2.30.1",
