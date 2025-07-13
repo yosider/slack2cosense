@@ -1,4 +1,4 @@
-import { generateResponse } from "../../../src/cosense";
+import { generateResponse, getUserName } from "../../../src/cosense";
 import { SlackMessageActionPayload } from "../../../types/slack";
 import { sendErrorResponse, sendSuccessResponse } from "../lib/slackResponse";
 
@@ -9,8 +9,8 @@ function createSuccessMessage(
 ): string {
   return (
     `✅ *Generated Cosense page URL!*\n\n` +
-    `*Original message:*\n` +
-    `> ${messageText}\n\n` +
+    `*Message:*\n` +
+    `${messageText}\n\n` +
     `*Channel:* #${channelName}\n` +
     `*User:* ${username}`
   );
@@ -25,6 +25,8 @@ export async function handleShareAction(
   console.log("Message:", payload.message.text);
 
   try {
+    const messageSenderUsername = await getUserName(payload.message.user);
+
     const cosenseBlocks = await generateResponse({
       team: payload.team,
       channel: payload.channel,
@@ -34,7 +36,7 @@ export async function handleShareAction(
 
     const successMessage = createSuccessMessage(
       payload.channel.name,
-      payload.user.username,
+      messageSenderUsername,
       payload.message.text
     );
 

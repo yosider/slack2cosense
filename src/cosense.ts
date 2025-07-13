@@ -189,4 +189,4 @@ const formatMessage = (
   return `${metadataText}\n${formattedText}`;
 };
 
-export { generateResponse };
+export { generateResponse, getUserName };
