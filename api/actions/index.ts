@@ -1,5 +1,4 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { SlackUrlVerificationPayload } from "../../types/slack";
 import { handleMessageActions } from "./handlers";
 import { getRawBody, parsePayload } from "./lib/requestParser";
 import {
@@ -15,6 +14,13 @@ import {
 } from "./lib/responseHelpers";
 import { verifySlackSignature } from "./lib/validation";
 
+// Vercel config: will be automatically loaded
+export const config = {
+  api: {
+    bodyParser: false, // Disable Vercel's body parser to get raw body data for signature verification
+  },
+};
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   console.log("=== Slack Events Handler ===");
   console.log("Method:", req.method);
@@ -28,38 +34,40 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (req.method === "POST") {
       console.log("📨 POST request received");
 
+      // Signature verification
       const timestamp = req.headers["x-slack-request-timestamp"] as string;
       const signature = req.headers["x-slack-signature"] as string;
-      const rawBody = getRawBody(req);
-
       if (!timestamp || !signature) {
         console.error("❌ Missing signature headers");
         return sendMissingHeadersError(res);
       }
 
-      if (
-        !verifySlackSignature(
-          process.env.SLACK_SIGNING_SECRET!,
-          rawBody,
-          timestamp,
-          signature
-        )
-      ) {
+      const rawBody = await getRawBody(req);
+
+      const isValid = verifySlackSignature(
+        process.env.SLACK_SIGNING_SECRET!,
+        rawBody,
+        timestamp,
+        signature
+      );
+      if (!isValid) {
         console.error("❌ Invalid signature");
         return sendInvalidSignatureError(res);
       }
-
       console.log("✅ Signature verified");
 
+      // Parse body data
+      const parsedBody = new URLSearchParams(rawBody);
+      const bodyObject = Object.fromEntries(parsedBody);
+
       // URL verification: Slack validates our endpoint URL during app setup
-      const body = req.body as SlackUrlVerificationPayload;
-      if (body.type === "url_verification") {
+      if (bodyObject.type === "url_verification") {
         console.log("🔗 URL verification request");
-        return sendChallengeResponse(res, body.challenge);
+        return sendChallengeResponse(res, bodyObject.challenge);
       }
 
       // Message actions: User interactions with message shortcuts/buttons
-      const payload = parsePayload(req.body);
+      const payload = parsePayload(bodyObject);
       if (payload && payload.type === "message_action") {
         console.log("🎯 Message action received:", payload.callback_id);
 
@@ -72,7 +80,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         }
       }
 
-      console.log("❓ Unknown request type:", req.body);
+      console.log("❓ Unknown request type:", bodyObject);
       return sendUnknownRequestStatus(res);
     }
 

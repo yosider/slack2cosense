@@ -9,6 +9,7 @@ export function verifySlackSignature(
   const hmac = crypto.createHmac("sha256", signingSecret);
   hmac.update(`v0:${timestamp}:${body}`);
   const expectedSignature = `v0=${hmac.digest("hex")}`;
+
   return crypto.timingSafeEqual(
     Buffer.from(expectedSignature),
     Buffer.from(signature)
