@@ -7,10 +7,12 @@ function createSuccessMessage(
   username: string,
   messageText: string
 ): string {
+  const quotedMessageText = messageText.replace(/^/gm, "> ");
+
   return (
     `✅ *Generated Cosense page URL!*\n\n` +
     `*Message:*\n` +
-    `${messageText}\n\n` +
+    `${quotedMessageText}\n\n` +
     `*Channel:* #${channelName}\n` +
     `*User:* ${username}`
   );
