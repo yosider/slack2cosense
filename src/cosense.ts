@@ -12,9 +12,14 @@ import type {
   SlackUserInfoResponse,
 } from "../types";
 
+const projectName = process.env.COSENSE_PROJECT_NAME;
+if (!projectName) {
+  throw new Error("COSENSE_PROJECT_NAME is not set");
+}
+
 const config: AppConfig = {
   slackApiUrl: "https://slack.com/api",
-  projectName: "yosider-private",
+  projectName,
   linkMessage: "Click this link to create a page",
   maxBlockNumChar: 3000,
 };
