@@ -20,7 +20,7 @@ if (!projectName) {
 const config: AppConfig = {
   slackApiUrl: "https://slack.com/api",
   projectName,
-  linkMessage: "Click this link to create a page",
+  linkMessage: "Click this link to create a page 📝",
   maxBlockNumChar: 3000,
 };
 
